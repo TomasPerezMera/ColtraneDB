@@ -9,7 +9,7 @@ import { userRouter } from './routes/user.router.js';
 
 
 const app = express();
-const httpServer = app.listen(8080, () => console.log('Listening on Port 8080'));
+const httpServer = app.listen(8080, () => console.log('Escuchando en Puerto: 8080'));
 
 const io = new Server(httpServer);
 
@@ -23,10 +23,13 @@ app.use('/api/users', userRouter);
 
 
 
-mongoose.connect(process.env.MONGO_URI, (error) => {
-    if (error) {
-        console.error('Error connecting to MongoDB:', error)
-        process.exit()
+const connectMongoDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('Conexión con éxito a MongoDB');
+    } catch (error) {
+        console.error('Error al conectar a MongoDB:', error);
+        process.exit();
     }
-});
-
+};
+connectMongoDB();
