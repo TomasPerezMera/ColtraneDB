@@ -33,12 +33,34 @@ router.post('/', async (req, res) => {
 
 // PUT
 router.put('/:id', async (req, res) => {
+
+    try {
+        const updateUser = req.body;
+
+        const userResult = await userModel.updateOne({ _id: req.params.id }, updateUser);
+        console.log(userResult);
+        res.send({ status: 200, payload: userResult });
+    }
+
+    catch (error) {
+        console.log(`Error al modificar usuario: error: ${error}`);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 
 // DELETE
 router.delete('/:id', async (req, res) => {
-});
 
+    try {
+        const userResult = await userModel.deleteOne({ _id: req.params.id });
+        console.log(userResult);
+        res.send({ status: 200, payload: userResult });
+    }
+    catch (error) {
+        console.log(`Error al eliminar usuario: error: ${error}`);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 export default router;
