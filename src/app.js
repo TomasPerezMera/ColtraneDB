@@ -1,11 +1,11 @@
-require('dotenv').config();
+import 'dotenv/config';
 import express from 'express';
 import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
 import {Server} from 'socket.io';
 import mongoose from 'mongoose';
-import { userRouter } from './routes/user.router.js';
+import userRouter from './routes/user.router.js';
 
 
 const app = express();
@@ -27,10 +27,10 @@ app.use('/api/users', userRouter);
 const connectMongoDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('Conexión con éxito a MongoDB');
+        console.log('Conexión con éxito a MongoDB!');
     } catch (error) {
         console.error('Error al conectar a MongoDB:', error);
-        process.exit();
+        process.exit(1);
     }
 };
 connectMongoDB();
