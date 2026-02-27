@@ -9,21 +9,25 @@ import userRouter from './routes/user.router.js';
 
 
 const app = express();
-const httpServer = app.listen(process.env.PORT, () => console.log('Escuchando en Puerto: ' + process.env.PORT));
 
-const io = new Server(httpServer);
-
+// 1. Configuración del motor de plantillas Handlebars.
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
+
+
+// 2. Configuración de middlewares.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+
+
+// 3. Configuración de rutas.
 app.use('/', viewsRouter);
 app.use('/api/users', userRouter);
 
 
-
+// 4. Conexión a MongoDB.
 const connectMongoDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
@@ -34,3 +38,11 @@ const connectMongoDB = async () => {
     }
 };
 connectMongoDB();
+
+
+// 5. Configuración del servidor HTTP.
+const httpServer = app.listen(process.env.PORT, () => console.log('Escuchando en Puerto: ' + process.env.PORT));
+
+
+// 6. Configuración de Socket.io.
+const io = new Server(httpServer);
