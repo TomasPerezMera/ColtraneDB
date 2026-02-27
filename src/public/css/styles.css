@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "Clarendon Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: local("Clarendon Regular"), url("./ClarendonRegular.woff") format("woff");
+}
+
+body {
+    font-family: "Clarendon Regular", serif;
+}
