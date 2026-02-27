@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express from 'express';
-import __dirname from './utils.js';
+import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
 import {Server} from 'socket.io';
@@ -9,7 +9,7 @@ import { userRouter } from './routes/user.router.js';
 
 
 const app = express();
-const httpServer = app.listen(8080, () => console.log('Escuchando en Puerto: 8080'));
+const httpServer = app.listen(process.env.PORT, () => console.log('Escuchando en Puerto: ' + process.env.PORT));
 
 const io = new Server(httpServer);
 
