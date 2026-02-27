@@ -6,6 +6,7 @@ import viewsRouter from './routes/views.router.js';
 import {Server} from 'socket.io';
 import mongoose from 'mongoose';
 import userRouter from './routes/user.router.js';
+import { initializeSocket } from './sockets/socket.handler.js';
 
 
 const app = express();
@@ -46,3 +47,4 @@ const httpServer = app.listen(process.env.PORT, () => console.log('Escuchando en
 
 // 6. Configuración de Socket.io.
 const io = new Server(httpServer);
+initializeSocket(io);
