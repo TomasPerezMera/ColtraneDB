@@ -1,3 +1,29 @@
 # ColtraneDB
 
-Database project integration for the E-Commerce "El Rincón De Coltrane" (https://github.com/TomasPerezMera/ElReactDeColtrane).-
+## Proyecto de Base de Datos y Backend para el E-Commerce "El Rincón De Coltrane" (https://github.com/TomasPerezMera/ElReactDeColtrane).-
+
+## Stack Tecnológico
+
+- **Backend:** Node.js + Express
+- **Template Engine:** Handlebars
+- **Base de Datos:** MongoDB con Mongoose
+- **Routing:** Socket.io
+- **Frontend:** Vanilla JS + CSS
+
+## Características
+
+- Catálogo de productos con búsqueda
+- Sistema de carrito (persistente y local)
+- Autenticación de usuarios
+- Actualizaciones en tiempo real
+- Panel de administración
+
+## Estructura
+
+src/
+├── models/ # Esquemas de Mongoose
+├── routes/ # Rutas de API y vistas
+├── views/ # Templates Handlebars
+├── services/ # Capa de Servicios
+├── public/ # Assets estáticos
+└── sockets/ # Manejadores Socket.io
