@@ -48,3 +48,4 @@ const httpServer = app.listen(process.env.PORT, () => console.log('Escuchando en
 // 6. Configuración de Socket.io.
 const io = new Server(httpServer);
 initializeSocket(io);
+app.set('io', io);

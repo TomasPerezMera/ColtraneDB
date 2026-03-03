@@ -1,67 +1,63 @@
 import { Router } from 'express';
-import userService from '../services/user.service.js';
+import UserService from '../services/user.service.js';
 
 const router = Router();
 
+// Middleware para agregar 'io' a req.
+router.use((req, res, next) => {
+    req.io = req.app.get('io');
+    next();
+});
 
 // GET
-router.getAll('/', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const users = await userService.getAll();
-        res.json({ status: 200, payload: users });
-    }
-    catch (error) {
+        const users = await UserService.getAll(req.query);
+        res.status(200).json({ status: 'success', payload: users });
+    } catch (error) {
         res.status(500).json({ status: 'error', message: error.message });
     }
 });
 
-router.getById('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const user = await userService.getById(req.params.id);
-        res.json({ status: 'success', payload: user });
-    }
-    catch (error) {
+        const user = await UserService.getById(req.params.id);
+        res.status(200).json({ status: 'success', payload: user });
+    } catch (error) {
         res.status(404).json({ status: 'error', message: error.message });
     }
 });
-
 
 // POST
 router.post('/', async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
-        const user = await userService.create({ firstName, lastName, email, password });
-        res.json({ status: 200, payload: user._id });
-    }
-    catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        const user = await UserService.create({ firstName, lastName, email, password });
+        res.status(201).json({ status: 'success', payload: user._id });
+    } catch (error) {
+        res.status(400).json({ status: 'error', message: error.message });
     }
 });
-
 
 // PUT
 router.put('/:id', async (req, res) => {
     try {
         const updateUser = req.body;
 
-        const userResult = await userService.update(req.params.id, updateUser);
-        res.json({ status: 200, payload: userResult });
-    }
-
-    catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        const userResult = await UserService.update(req.params.id, updateUser);
+        res.status(200).json({ status: 'success', payload: userResult });
+    } catch (error) {
+        res.status(400).json({ status: 'error', message: error.message });
     }
 });
-
 
 // DELETE
 router.delete('/:id', async (req, res) => {
     try {
-        const userResult = await userService.delete(req.params.id);
-        res.json({ status: 200, payload: userResult });
-    }
-    catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        const userResult = await UserService.delete(req.params.id);
+        res.status(200).json({ status: 'success', payload: userResult });
+    } catch (error) {
+        res.status(404).json({ status: 'error', message: error.message });
     }
 });
 

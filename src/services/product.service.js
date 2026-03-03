@@ -1,6 +1,4 @@
-import { paginate } from 'mongoose-paginate-v2';
 import productModel from '../models/product.model.js';
-import io from '../utils/socket.js';
 
 class ProductService {
 
@@ -54,7 +52,6 @@ class ProductService {
     async create(productData) {
         try {
             const newProduct = await productModel.create(productData);
-            io.emit('productCreated', newProduct);
             return newProduct;
         } catch (error) {
             throw new Error('Error creando producto: ' + error.message);
@@ -74,7 +71,6 @@ class ProductService {
             if (!updatedProduct) {
                 throw new Error('Producto no encontrado');
             }
-            io.emit('productUpdated', updatedProduct);
             return updatedProduct;
         } catch (error) {
             throw new Error('Error actualizando producto: ' + error.message);
@@ -87,7 +83,6 @@ class ProductService {
                 throw new Error('ID de producto inválido');
             }
             const deletedProduct = await productModel.findByIdAndUpdate(productId, { isAvailable: false }, { new: true });
-            io.emit('productDeleted', deletedProduct);
             if (!deletedProduct) {
                 throw new Error('Producto no encontrado');
             }
@@ -96,18 +91,6 @@ class ProductService {
             throw new Error('Error eliminando producto: ' + error.message);
         }
     }
-
-    // Conviene sólo search(params) y luego un if(params = category)?
-    async searchByCategory(category) {
-        try {
-            const products = await productModel.find({ category: category });
-            io.emit('productsList', products);
-            return products;
-        } catch (error) {
-            throw new Error('Error buscando productos por categoría: ' + error.message);
-        }
-    }
 }
 
-
-export default ProductService;
+export default new ProductService();

@@ -1,22 +1,27 @@
 import userModel from '../models/user.model.js';
+import mongoose from 'mongoose';
 
 class UserService {
 
-    async getAll() {
+    async getAll(options = {}) {
         try {
-            const users = await userModel.find();
-            return users;
+            const { page = 1, limit = 10 } = options;
+            return await userModel.paginate({}, { page, limit });
         } catch (error) {
-            throw new Error('Error obteniendo usuarios: ' + error.message);
+            throw new Error(`Error al obtener usuarios: ${error.message}`);
         }
     }
 
-    async getById(id) {
+    async getById(userId) {
         try {
-            const user = await userModel.findById(id);
+            if (!mongoose.Types.ObjectId.isValid(userId)) {
+                throw new Error('ID de usuario inválido');
+            }
+            const user = await userModel.findById(userId);
+            if (!user) throw new Error('Usuario no encontrado');
             return user;
         } catch (error) {
-            throw new Error('Error obteniendo usuario: ' + error.message);
+            throw new Error(`Error obteniendo usuario: ${error.message}`);
         }
     }
 
@@ -25,38 +30,34 @@ class UserService {
             const newUser = await userModel.create(userData);
             return newUser;
         } catch (error) {
-            throw new Error('Error creando usuario: ' + error.message);
+            throw new Error(`Error creando usuario: ${error.message}`);
         }
     }
 
-    async update(id, userData) {
+    async update(userId, updateData) {
         try {
-            const updatedUser = await userModel.findByIdAndUpdate(id, userData, { new: true });
+            if (!mongoose.Types.ObjectId.isValid(userId)) {
+                throw new Error('ID de usuario inválido');
+            }
+            const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
+            if (!updatedUser) throw new Error('Usuario no encontrado');
             return updatedUser;
         } catch (error) {
-            throw new Error('Error actualizando usuario: ' + error.message);
+            throw new Error(`Error actualizando usuario: ${error.message}`);
         }
     }
 
-    async delete(id) {
+    async delete(userId) {
         try {
-            const deletedUser = await userModel.findByIdAndDelete(id);
+            if (!mongoose.Types.ObjectId.isValid(userId)) {
+                throw new Error('ID de usuario inválido');
+            }
+            const deletedUser = await userModel.findByIdAndDelete(userId);
             return deletedUser;
         } catch (error) {
-            throw new Error('Error eliminando usuario: ' + error.message);
+            throw new Error(`Error eliminando usuario: ${error.message}`);
         }
     }
-
-    // Conviene sólo search(params) y luego un if(params = category) o algo así?
-    async searchByCategory(category) {
-        try {
-            const users = await userModel.find({ category: category });
-            return users;
-        } catch (error) {
-            throw new Error('Error buscando usuarios por categoría: ' + error.message);
-        }
-    }
-
 }
 
-export default UserService;
+export default new UserService();
