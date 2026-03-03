@@ -20,6 +20,7 @@
 
 ## Estructura
 
+```
 src/
 ├── models/ # Esquemas de Mongoose
 ├── routes/ # Rutas de API y vistas
@@ -27,3 +28,4 @@ src/
 ├── services/ # Capa de Servicios
 ├── public/ # Assets estáticos
 └── sockets/ # Manejadores Socket.io
+```

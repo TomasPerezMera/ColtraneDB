@@ -1,24 +1,52 @@
+import { paginate } from 'mongoose-paginate-v2';
 import productModel from '../models/product.model.js';
 import io from '../utils/socket.js';
 
 class ProductService {
 
-    async getAll() {
+    async getAll(options = {}) {
         try {
-            const products = await productModel.find();
-            io.emit('productsList', products);
-            return products;
+            const {
+                page = 1,
+                limit = 4,
+                sort,
+                category,
+                artist,
+                available
+            } = options;
+
+            const filter = {};
+
+            if (category) filter.category = category;
+            if (artist) filter.artist = artist;
+            if (available !== undefined) filter.isAvailable = available;
+
+            // Opciones de paginación.
+            const paginateOptions = {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                sort: sort === 'asc' ? { currentPrice: 1 } :
+                sort === 'desc' ? { currentPrice: -1 } : {}
+            };
+
+            const result = await productModel.find(filter, paginateOptions);
+            return result;
         } catch (error) {
             throw new Error('Error obteniendo productos: ' + error.message);
         }
     }
 
-    async getById(id) {
-        try {
-            const product = await productModel.findById(id);
-            io.emit('productDetails', product);
-            return product;
-        } catch (error) {
+    async getById(productId) {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            throw new Error('ID de producto inválido');
+        }
+        const product = await productModel.findById(productId);
+        if (!product) {
+            throw new Error('Producto no encontrado!');
+        }
+        return product;
+    } catch (error) {
             throw new Error('Error obteniendo producto: ' + error.message);
         }
     }
@@ -33,9 +61,19 @@ class ProductService {
         }
     }
 
-    async update(id, productData) {
+    async update(productId, updateData) {
         try {
-            const updatedProduct = await productModel.findByIdAndUpdate(id, productData, { new: true });
+            if (!mongoose.Types.ObjectId.isValid(productId)) {
+                throw new Error('ID de producto inválido');
+            }
+            //Si stock llega a 0, marcar como no disponible.
+            if (updateData.stock !== undefined && updateData.stock === 0) {
+                updateData.isAvailable = false;
+            }
+            const updatedProduct = await productModel.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
+            if (!updatedProduct) {
+                throw new Error('Producto no encontrado');
+            }
             io.emit('productUpdated', updatedProduct);
             return updatedProduct;
         } catch (error) {
@@ -43,10 +81,16 @@ class ProductService {
         }
     }
 
-    async delete(id) {
+    async delete(productId) {
         try {
-            const deletedProduct = await productModel.findByIdAndDelete(id);
+            if (!mongoose.Types.ObjectId.isValid(productId)) {
+                throw new Error('ID de producto inválido');
+            }
+            const deletedProduct = await productModel.findByIdAndUpdate(productId, { isAvailable: false }, { new: true });
             io.emit('productDeleted', deletedProduct);
+            if (!deletedProduct) {
+                throw new Error('Producto no encontrado');
+            }
             return deletedProduct;
         } catch (error) {
             throw new Error('Error eliminando producto: ' + error.message);

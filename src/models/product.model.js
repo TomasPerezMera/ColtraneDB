@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const productCollection = 'products';
 
@@ -46,7 +47,7 @@ const productSchema = new mongoose.Schema({
     category: {
         type: String,
         required: [true, 'La categoría es obligatoria!'],
-        enum: ['Jazz', 'Blues'],
+        enum: ['Jazz', 'Blues', 'Otros'],
         index: true
     },
     isAvailable: {
@@ -57,6 +58,9 @@ const productSchema = new mongoose.Schema({
     timestamps: true,
     versionKey: false
 });
+
+// Implementamos Paginate.
+productSchema.plugin(mongoosePaginate);
 
 // Método para calcular el precio final en caso de aplicar descuento.
 productSchema.virtual('finalPrice').get(function() {
