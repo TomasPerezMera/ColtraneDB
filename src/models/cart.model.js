@@ -36,4 +36,5 @@ cartSchema.virtual('totalPrice').get(function() {
 cartSchema.set('toJSON', { virtuals: true });
 cartSchema.set('toObject', { virtuals: true });
 
-export const cartModel = mongoose.model(cartCollection, cartSchema);
+const cartModel = mongoose.model(cartCollection, cartSchema);
+export default cartModel;

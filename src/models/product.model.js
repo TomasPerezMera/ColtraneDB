@@ -74,4 +74,5 @@ productSchema.virtual('finalPrice').get(function() {
 productSchema.set('toJSON', { virtuals: true });
 productSchema.set('toObject', { virtuals: true });
 
-export const productModel = mongoose.model(productCollection, productSchema);
+const productModel = mongoose.model(productCollection, productSchema);
+export default productModel;
