@@ -1,4 +1,5 @@
 import productModel from '../models/product.model.js';
+import mongoose from 'mongoose';
 
 class ProductService {
 
@@ -14,7 +15,6 @@ class ProductService {
             } = options;
 
             const filter = {};
-
             if (category) filter.category = category;
             if (artist) filter.artist = artist;
             if (available !== undefined) filter.isAvailable = available;
@@ -27,7 +27,15 @@ class ProductService {
                 sort === 'desc' ? { currentPrice: -1 } : {}
             };
 
-            const result = await productModel.find(filter, paginateOptions);
+            const result = await productModel.paginate(filter, paginateOptions);
+            const baseUrl = '/api/products';
+                result.prevLink = result.hasPrevPage
+                    ? `${baseUrl}?page=${result.prevPage}&limit=${limit}`
+                    : null;
+                result.nextLink = result.hasNextPage
+                    ? `${baseUrl}?page=${result.nextPage}&limit=${limit}`
+                    : null;
+
             return result;
         } catch (error) {
             throw new Error('Error obteniendo productos: ' + error.message);

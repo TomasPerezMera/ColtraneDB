@@ -13,7 +13,18 @@ router.use((req, res, next) => {
     router.get('/', async (req, res) => {
         try {
             const products = await ProductService.getAll(req.query);
-            res.status(200).json({ status: 'success', payload: products });
+            res.status(200).json({
+                status: 'success',
+                payload: products.docs,
+                totalPages: products.totalPages,
+                prevPage: products.prevPage,
+                nextPage: products.nextPage,
+                page: products.page,
+                hasPrevPage: products.hasPrevPage,
+                hasNextPage: products.hasNextPage,
+                prevLink: products.prevLink,
+                nextLink: products.nextLink
+            });
         }
         catch (error) {
             res.status(500).json({ status: 'error', message: error.message });
