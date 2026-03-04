@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import ProductService from '../services/product.service.js';
-import productModel from '../models/product.model.js';
 
 const router = Router();
 
@@ -34,7 +33,7 @@ router.use((req, res, next) => {
 
     router.get('/:id', async (req, res) => {
         try {
-            const product = await productModel.findOne({ id: req.params.id });
+            const product = await ProductService.getById(req.params.id);
             if (!product) throw new Error('Producto no encontrado');
             res.status(200).json({ status: 'success', payload: product });
         }

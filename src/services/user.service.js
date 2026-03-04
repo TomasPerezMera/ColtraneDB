@@ -1,5 +1,4 @@
 import userModel from '../models/user.model.js';
-import mongoose from 'mongoose';
 
 class UserService {
 

@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import UserService from '../services/user.service.js';
-import userModel from '../models/user.model.js';
 
 const router = Router();
 
@@ -22,7 +21,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const user = await userModel.findOne({ id: req.params.id });
+        const user = await UserService.getById(req.params.id);
         if (!user) throw new Error('Usuario no encontrado');
         res.status(200).json({ status: 'success', payload: user });
     } catch (error) {

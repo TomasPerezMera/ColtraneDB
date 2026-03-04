@@ -25,12 +25,15 @@ const userSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        match: [/^\S+@\S+\.\S+$/, 'Error - email con caracteres inválidos!']
+        match: [/^\S+@\S+\.\S+$/, 'Error - email con caracteres inválidos!'],
+        // Ocultaremos contraseña y email en respuestas por seguridad de datos.
+        select: false
     },
     password: {
         type: String,
         required: [true, 'La contraseña es obligatoria!'],
-        minlength: [6, 'La contraseña debe tener al menos 6 caracteres']
+        minlength: [6, 'La contraseña debe tener al menos 6 caracteres'],
+        select: false
     },
     role: {
         type: String,

@@ -1,5 +1,4 @@
 import productModel from '../models/product.model.js';
-import mongoose from 'mongoose';
 
 class ProductService {
 
