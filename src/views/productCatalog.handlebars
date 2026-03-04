@@ -3,6 +3,9 @@
     <hr>
     {{#each products.docs}}
         <div class="product-card">
+            <div class="product-image">
+                <img src="{{this.coverImageSource}}" alt="{{this.name}}">
+            </div>
             <h2>{{this.name}}</h2>
             <p>Artista: {{this.artist}}</p>
             <p>Precio: ${{this.currentPrice}}</p>
