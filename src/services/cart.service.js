@@ -46,16 +46,17 @@ class CartService {
             if (currentTotalItems + quantity > 3) {
             throw new Error('Lo sentimos! Se permite un máximo 3 ítems por compra.');
             }
+
+            // Indexamos cada producto del carrito para sumar cantidad ó crear nuevo registro.
             const existingProductIndex = cart.products.findIndex(
                 item => item.product.toString() === productId
             );
-
             if (existingProductIndex !== -1) {
                 cart.products[existingProductIndex].quantity += quantity;
             } else {
                 cart.products.push({ product: productId, quantity: quantity });
             }
-
+            // Guardamos el carrito actualizado y lo retornamos con los datos del producto poblados.
             await cart.save();
             const updatedCart = await cartModel
                 .findById(cartId)
@@ -93,7 +94,7 @@ class CartService {
                 const otherProductsQty = cart.products.reduce(
                     (sum, item, idx) => idx === productIndex ? sum : sum + item.quantity, 0 );
                 if (otherProductsQty + newQuantity > 3) {
-                    throw new Error('Máximo 3 ítems por compra');
+                    throw new Error('Máximo 3 ítems por compra!');
                 }
                 cart.products[productIndex].quantity = newQuantity;
             }
@@ -115,6 +116,7 @@ class CartService {
             const cart = await cartModel.findById(cartId);
             if (!cart) throw new Error('Carrito no encontrado');
 
+            // Filtramos el producto a eliminar y guardamos el carrito actualizado.
             cart.products = cart.products.filter(
                 item => item.product.toString() !== productId
             );

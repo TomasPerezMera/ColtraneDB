@@ -26,6 +26,8 @@ app.use(express.static(__dirname + '/public'));
 // 3. Configuración de rutas.
 app.use('/', viewsRouter);
 app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
+app.use('/api/carts', cartRouter);
 
 
 // 4. Conexión a MongoDB.

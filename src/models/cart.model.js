@@ -21,7 +21,7 @@ const cartSchema = new mongoose.Schema({
     versionKey: false
 });
 
-// Método virtual para calcular el total del carrito
+// Método para calcular el total del carrito
 cartSchema.virtual('totalPrice').get(function() {
     let total = 0;
 
