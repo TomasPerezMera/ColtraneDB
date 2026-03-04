@@ -1,22 +1,25 @@
-<h1>Catálogo de Vinilos</h1>
-
-{{#each products.docs}}
-    <div class="product-card">
-        <h2>{{this.name}}</h2>
-        <p>Artista: {{this.artist}}</p>
-        <p>Precio: ${{this.currentPrice}}</p>
-        <button data-id="{{this._id}}">Agregar al carrito</button>
+<div class="product-catalog-container">
+    <h1>Catálogo de Vinilos</h1>
+    <hr>
+    {{#each products.docs}}
+        <div class="product-card">
+            <h2>{{this.name}}</h2>
+            <p>Artista: {{this.artist}}</p>
+            <p>Precio: ${{this.currentPrice}}</p>
+            <a href="/products/{{this._id}}">Ver detalle</a>
+            <button data-id="{{this._id}}">Agregar al carrito</button>
+        </div>
+    {{/each}}
+    <hr>
+    <div class="pagination">
+        {{#if products.hasPrevPage}}
+            <a href="/products?page={{products.prevPage}}">← Anterior</a>
+        {{/if}}
+            &nbsp;
+            <span>Página {{products.page}} de {{products.totalPages}}</span>
+            &nbsp;
+        {{#if products.hasNextPage}}
+            <a href="/products?page={{products.nextPage}}">Siguiente →</a>
+        {{/if}}
     </div>
-{{/each}}
-
-<div class="pagination">
-    {{#if products.hasPrevPage}}
-        <a href="/products?page={{products.prevPage}}">← Anterior</a>
-    {{/if}}
-        &nbsp;
-        <span>Página {{products.page}} de {{products.totalPages}}</span>
-        &nbsp;
-    {{#if products.hasNextPage}}
-        <a href="/products?page={{products.nextPage}}">Siguiente →</a>
-    {{/if}}
 </div>

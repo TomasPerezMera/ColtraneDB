@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 @font-face {
     font-family: "Clarendon Regular";
     font-style: normal;
@@ -7,4 +13,35 @@
 
 body {
     font-family: "Clarendon Regular", serif;
+    background-color: #000000;
+    color: white;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.product-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+button, a {
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+hr {
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to left, #4b6cad, #72419d);
+    margin: 10px auto;
+    border: none;
+    opacity: 0.8;
 }
