@@ -8,7 +8,7 @@
 - **Template Engine:** Handlebars
 - **Base de Datos:** MongoDB con Mongoose
 - **Routing:** Socket.io
-- **Frontend:** Vanilla JS + CSS
+- **Frontend:** JavaScript + CSS
 
 ## Características
 
