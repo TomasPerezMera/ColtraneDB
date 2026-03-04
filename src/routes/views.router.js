@@ -4,13 +4,19 @@ import CartService from '../services/cart.service.js';
 
 const router = Router();
 
+// Directorio raíz de índice.
+router.get('/', (req, res) => {
+    res.render('index');
+});
+
 // GET /products - Catálogo paginado.
 router.get('/products', async (req, res) => {
     try {
-        const products = await ProductService.getAll(req.query);
-        res.render('products', {
+        const result = await ProductService.getAll(req.query);
+        res.render('productCatalog', {
             title: 'Catálogo',
-            products
+            products: result.docs.map(p => p.toObject()),
+            pagination: result
         });
     } catch (error) {
         res.render('error', { message: error.message });
@@ -20,10 +26,10 @@ router.get('/products', async (req, res) => {
 // GET /products/:pid - Detalle del producto.
 router.get('/products/:pid', async (req, res) => {
     try {
-        const product = await ProductService.getById(req.params.pid);
-        res.render('product-detail', {
-            title: product.name,
-            product
+        const result = await ProductService.getById(req.params.pid);
+        res.render('productDetail', {
+            title: result.name,
+            product: result.toObject()
         });
     } catch (error) {
         res.render('error', { message: error.message });

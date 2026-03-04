@@ -1,28 +1,33 @@
-<div class="product-catalog-container">
-    <h1>Catálogo de Vinilos</h1>
-    <hr>
-    {{#each products.docs}}
-        <div class="product-card">
-            <div class="product-image">
-                <img src="{{this.coverImageSource}}" alt="{{this.name}}">
-            </div>
-            <h2>{{this.name}}</h2>
-            <p>Artista: {{this.artist}}</p>
-            <p>Precio: ${{this.currentPrice}}</p>
-            <a href="/products/{{this._id}}">Ver detalle</a>
-            <button data-id="{{this._id}}">Agregar al carrito</button>
+<section class="product-catalog">
+    <div class="product-catalog-container">
+        <h1>Catálogo de Vinilos</h1>
+        <hr>
+        <div class="product-grid">
+            {{#each products}}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="/static/covers/{{coverImageSource}}" alt="{{name}}">
+                    </div>
+                    <h2>{{name}}</h2>
+                    <p>Artista: {{artist}}</p>
+                    <p>Precio: ${{currentPrice}}</p>
+                    <a href="/products/{{id}}">Ver detalle</a>
+                    <button data-id="{{id}}">Agregar al carrito</button>
+                </div>
+            {{/each}}
         </div>
-    {{/each}}
-    <hr>
-    <div class="pagination">
-        {{#if products.hasPrevPage}}
-            <a href="/products?page={{products.prevPage}}">← Anterior</a>
-        {{/if}}
-            &nbsp;
-            <span>Página {{products.page}} de {{products.totalPages}}</span>
-            &nbsp;
-        {{#if products.hasNextPage}}
-            <a href="/products?page={{products.nextPage}}">Siguiente →</a>
-        {{/if}}
+
+        <hr>
+        <div class="pagination">
+            {{#if pagination.hasPrevPage}}
+                <a href="/products?page={{pagination.prevPage}}">← Anterior</a>
+            {{/if}}
+                &nbsp;
+                <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
+                &nbsp;
+            {{#if pagination.hasNextPage}}
+                <a href="/products?page={{pagination.nextPage}}">Siguiente →</a>
+            {{/if}}
+        </div>
     </div>
-</div>
+</section>

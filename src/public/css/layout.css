@@ -1,0 +1,23 @@
+.product-catalog-container {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .product-catalog-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .product-card {
+        flex: 1 1 calc(50% - 1rem);
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-catalog-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .product-card {
+        flex: 1 1 calc(33.333% - 1rem);
+    }
+}

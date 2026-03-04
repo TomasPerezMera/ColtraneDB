@@ -1,0 +1,44 @@
+/* Variables globales para colores, espaciados y bordes. */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primary: black;
+    --color-accent: #4f2d7f;
+    --spacing-md: 1rem;
+    --border-radius: 8px;
+    --blue: #4b6cad;
+    --violet: #72419d;
+    --darkBlue: #2551a8;
+    --darkViolet: #4f2d7f;
+}
+
+@font-face {
+    font-family: "Clarendon Regular";
+    font-style: normal;
+    font-weight: normal;
+    src: local("Clarendon Regular"), url("./ClarendonRegular.woff") format("woff");
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: "Clarendon Regular";
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+hr {
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to left, #4b6cad, #72419d);
+    margin: 10px auto;
+    border: none;
+    opacity: 0.8;
+}

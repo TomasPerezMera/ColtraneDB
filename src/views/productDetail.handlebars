@@ -1,27 +1,30 @@
 <div class="product-detail-container">
     <h1>{{product.name}}</h1>
-
     <div class="product-detail">
         <div class="product-image">
-            <img src="{{product.coverImageSource}}" alt="{{product.name}}">
+            <img src="/static/covers/{{product.coverImageSource}}" alt="{{product.name}}">
         </div>
-
         <div class="product-info">
-            <p><strong>Artista:</strong> {{product.artist}}</p>
-            <p><strong>Precio:</strong> ${{product.currentPrice}}</p>
-            <p><strong>Categoría:</strong> {{product.category}}</p>
-            <p><strong>Stock:</strong> {{product.stock}} unidades</p>
-
-            <div class="description">
-                <h3>Descripción: </h3>
-                <p>{{product.description}}</p>
+            <div class="product-titles">
+                <p><strong>Artista:</strong> {{product.artist}}</p>
+                <p><strong>Precio:</strong> ${{product.currentPrice}}</p>
+                <p><strong>Categoría:</strong> {{product.category}}</p>
+                <p><strong>Stock:</strong> {{product.stock}} unidades</p>
             </div>
 
-            <button data-product-id="{{product._id}}" id="add-to-cart">
-                Agregar al carrito
-            </button>
+            <div class="description">
+                <h3>Descripción:</h3>
+                &nbsp;
+                <p>{{product.description}}</p>
+                &nbsp;
+            </div>
             <hr>
-            <a href="/products">Volver al catálogo</a>
+            <div class="product-buttons">
+                <button data-product-id="{{product._id}}" id="add-to-cart">
+                    Agregar al carrito
+                </button>
+                <a href="/products">Volver al catálogo</a>
+            </div>
         </div>
     </div>
 </div>
