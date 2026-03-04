@@ -4,6 +4,11 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 const userCollection = 'users';
 
 const userSchema = new mongoose.Schema({
+    id: {
+        type: Number,
+        unique: true,
+        required: true
+    },
     firstName: {
         type: String,
         required: [true, 'El nombre es obligatorio!'],
@@ -43,6 +48,15 @@ const userSchema = new mongoose.Schema({
 
 // Implementamos Paginate.
 userSchema.plugin(mongoosePaginate);
+
+// Middleware para auto-incrementar id al crear un producto.
+userSchema.pre('save', async function(next) {
+    if (this.isNew) {
+        const lastUser = await this.constructor.findOne().sort({ id: -1 });
+        this.id = lastUser ? lastUser.id + 1 : 1;
+    }
+    next();
+});
 
 const userModel = mongoose.model(userCollection, userSchema);
 export default userModel;

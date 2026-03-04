@@ -14,10 +14,11 @@ class UserService {
 
     async getById(userId) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(userId)) {
+            // Validamos que ID sea numérico.
+            if (!Number.isInteger(Number(userId))) {
                 throw new Error('ID de usuario inválido');
             }
-            const user = await userModel.findById(userId);
+            const user = await userModel.findOne({ id: userId });
             if (!user) throw new Error('Usuario no encontrado');
             return user;
         } catch (error) {
@@ -36,10 +37,10 @@ class UserService {
 
     async update(userId, updateData) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(userId)) {
+            if (!Number.isInteger(Number(userId))) {
                 throw new Error('ID de usuario inválido');
             }
-            const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
+            const updatedUser = await userModel.findOneAndUpdate({ id: userId }, updateData, { new: true, runValidators: true });
             if (!updatedUser) throw new Error('Usuario no encontrado');
             return updatedUser;
         } catch (error) {
@@ -49,10 +50,13 @@ class UserService {
 
     async delete(userId) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(userId)) {
+            if (!Number.isInteger(Number(userId))) {
                 throw new Error('ID de usuario inválido');
             }
-            const deletedUser = await userModel.findByIdAndDelete(userId);
+            const deletedUser = await userModel.deleteOne({ id: userId });
+            if (deletedUser.deletedCount === 0) {
+                throw new Error('Usuario no encontrado');
+            }
             return deletedUser;
         } catch (error) {
             throw new Error(`Error eliminando usuario: ${error.message}`);

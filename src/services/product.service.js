@@ -44,10 +44,11 @@ class ProductService {
 
     async getById(productId) {
     try {
-        if (!mongoose.Types.ObjectId.isValid(productId)) {
+        // Validamos que ID sea numérico.
+        if (!Number.isInteger(Number(productId))) {
             throw new Error('ID de producto inválido');
         }
-        const product = await productModel.findById(productId);
+        const product = await productModel.findOne({ id: productId });
         if (!product) {
             throw new Error('Producto no encontrado!');
         }
@@ -68,14 +69,14 @@ class ProductService {
 
     async update(productId, updateData) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(productId)) {
+            if (!Number.isInteger(Number(productId))) {
                 throw new Error('ID de producto inválido');
             }
             //Si stock llega a 0, marcar como no disponible.
             if (updateData.stock !== undefined && updateData.stock === 0) {
                 updateData.isAvailable = false;
             }
-            const updatedProduct = await productModel.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
+            const updatedProduct = await productModel.findOneAndUpdate({ id: productId }, updateData, { new: true, runValidators: true });
             if (!updatedProduct) {
                 throw new Error('Producto no encontrado');
             }
@@ -87,10 +88,10 @@ class ProductService {
 
     async delete(productId) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(productId)) {
+            if (!Number.isInteger(Number(productId))) {
                 throw new Error('ID de producto inválido');
             }
-            const deletedProduct = await productModel.findByIdAndUpdate(productId, { isAvailable: false }, { new: true });
+            const deletedProduct = await productModel.findOneAndUpdate({ id: productId }, { isAvailable: false }, { new: true });
             if (!deletedProduct) {
                 throw new Error('Producto no encontrado');
             }

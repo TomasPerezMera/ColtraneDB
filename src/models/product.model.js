@@ -4,6 +4,11 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 const productCollection = 'products';
 
 const productSchema = new mongoose.Schema({
+    id: {
+        type: Number,
+        unique: true,
+        required: true
+    },
     name: {
         type: String,
         required: [true, 'El nombre es obligatorio!'],
@@ -73,6 +78,15 @@ productSchema.virtual('finalPrice').get(function() {
 // Declaraciones para incluir campo virtual finalPrice en JSON/Object.
 productSchema.set('toJSON', { virtuals: true });
 productSchema.set('toObject', { virtuals: true });
+
+// Middleware para auto-incrementar id al crear un producto.
+productSchema.pre('save', async function(next) {
+    if (this.isNew) {
+        const lastProduct = await this.constructor.findOne().sort({ id: -1 });
+        this.id = lastProduct ? lastProduct.id + 1 : 1;
+    }
+    next();
+});
 
 const productModel = mongoose.model(productCollection, productSchema);
 export default productModel;

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import UserService from '../services/user.service.js';
+import userModel from '../models/user.model.js';
 
 const router = Router();
 
@@ -21,7 +22,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const user = await UserService.getById(req.params.id);
+        const user = await userModel.findOne({ id: req.params.id });
+        if (!user) throw new Error('Usuario no encontrado');
         res.status(200).json({ status: 'success', payload: user });
     } catch (error) {
         res.status(404).json({ status: 'error', message: error.message });
@@ -31,8 +33,8 @@ router.get('/:id', async (req, res) => {
 // POST
 router.post('/', async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
-        const user = await UserService.create({ firstName, lastName, email, password });
+        const { firstName, lastName, email, password, role } = req.body;
+        const user = await UserService.create({ firstName, lastName, email, password, role });
         res.status(201).json({ status: 'success', payload: user._id });
     } catch (error) {
         res.status(400).json({ status: 'error', message: error.message });
@@ -43,7 +45,6 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const updateUser = req.body;
-
         const userResult = await UserService.update(req.params.id, updateUser);
         res.status(200).json({ status: 'success', payload: userResult });
     } catch (error) {

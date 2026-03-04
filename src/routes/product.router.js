@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import ProductService from '../services/product.service.js';
+import productModel from '../models/product.model.js';
 
 const router = Router();
 
@@ -33,7 +34,8 @@ router.use((req, res, next) => {
 
     router.get('/:id', async (req, res) => {
         try {
-            const product = await ProductService.getById(req.params.id);
+            const product = await productModel.findOne({ id: req.params.id });
+            if (!product) throw new Error('Producto no encontrado');
             res.status(200).json({ status: 'success', payload: product });
         }
         catch (error) {
@@ -44,7 +46,11 @@ router.use((req, res, next) => {
 // POST
     router.post('/', async (req, res) => {
         try {
-            const newProduct = await ProductService.create(req.body);
+        const { name, artist, description, coverImageSource, currentPrice,
+            discount, stock, category, isAvailable } = req.body;
+        const newProduct = await ProductService.create({
+            name, artist, description, coverImageSource, currentPrice,
+            discount, stock, category, isAvailable });
             req.io.emit('newProductAdded', newProduct);
             res.status(201).json({ status: 'success', payload: newProduct });
         } catch (error) {
