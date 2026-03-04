@@ -2,10 +2,12 @@ import 'dotenv/config';
 import express from 'express';
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
-import viewsRouter from './routes/views.router.js';
 import {Server} from 'socket.io';
 import mongoose from 'mongoose';
 import userRouter from './routes/user.router.js';
+import productRouter from './routes/product.router.js';
+import cartRouter from './routes/cart.router.js';
+import viewsRouter from './routes/views.router.js';
 import { initializeSocket } from './sockets/socket.handler.js';
 
 
