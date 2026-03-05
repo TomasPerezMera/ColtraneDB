@@ -8,7 +8,6 @@
 :root {
     --color-primary: black;
     --color-accent: #4f2d7f;
-    --spacing-md: 1rem;
     --border-radius: 8px;
     --blue: #4b6cad;
     --violet: #72419d;
@@ -38,7 +37,77 @@ hr {
     width: 80%;
     height: 2px;
     background: linear-gradient(to left, #4b6cad, #72419d);
-    margin: 10px auto;
+    margin: 20px auto;
     border: none;
     opacity: 0.8;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    .navbar-logo img {
+        display: inline-flex;
+        height: 40px;
+        width: 40px;
+        object-fit: contain;
+        transition: transform .2s ease;
+        &:hover img {
+            transform: scale(1.05);
+        }
+    }
+}
+
+
+/* Utility Classes */
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font: inherit;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid var(--darkBlue);
+    background-color: transparent;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+    &:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 0 10px rgba(0,0,0,.5),
+        0 0 20px rgba(66,135,245,.6);
+    }
+}
+
+.nav-btn {
+    appearance: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: none;
+}
+
+.gradient-border {
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background:
+        linear-gradient(#000,#000) padding-box,
+        linear-gradient(to left,var(--violet),var(--darkBlue)) border-box;
+    box-shadow: 0 0 15px rgba(120,90,255,0.2);
+}
+
+.hover-vinyl {
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(90,80,255,0.25);
+
+        img {
+        transform: scale(1.05);
+        }
+    }
 }

@@ -19,7 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ quantity: 1 })
             });
-            Swal.fire('Producto agregado!!!!');
+            Swal.fire({
+                toast: true,
+                position: "top-left",
+                icon: "success",
+                title: "Producto agregado al carrito!",
+                showConfirmButton: false,
+                timer: 3000
+            });
         });
     });
 
@@ -31,4 +38,61 @@ document.addEventListener('DOMContentLoaded', () => {
             cartLink.href = `/carts/${cartId}`;
         }
     }
+
+    // Botones "Ver detalle"
+    document.querySelectorAll('.btn-detail').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const productId = e.target.dataset.productId;
+        window.location.href = `/products/${productId}`;
+        });
+    });
+
+
+    // Botones de ProductDetail.
+    let quantity = 1;
+    const qtyValue = document.querySelector('.qty-value');
+    const minusBtn = document.querySelector('.qty-btn.minus');
+    const plusBtn = document.querySelector('.qty-btn.plus');
+
+    if (plusBtn) {
+        plusBtn.addEventListener('click', () => {
+            if (quantity < 3) {  // Límite de 3
+                quantity++;
+                qtyValue.textContent = quantity;
+            }
+        });
+    }
+
+    if (minusBtn) {
+        minusBtn.addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                qtyValue.textContent = quantity;
+            }
+        });
+    }
+
+    const addBtn = document.getElementById('add-to-cart-btn');
+    if (addBtn) {
+        addBtn.addEventListener('click', async () => {
+            const productId = addBtn.dataset.productId;
+            const cartId = localStorage.getItem('cartId');
+            await fetch(`/api/carts/${cartId}/products/${productId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantity })  // ← Usa la quantity seleccionada
+            });
+            Swal.fire({
+                toast: true,
+                position: "top-left",
+                icon: "success",
+                title: "Producto agregado al carrito!",
+                showConfirmButton: false,
+                timer: 3000
+            });
+        });
+    }
+
+
 });
+

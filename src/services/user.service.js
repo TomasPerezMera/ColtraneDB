@@ -39,7 +39,7 @@ class UserService {
             if (!Number.isInteger(Number(userId))) {
                 throw new Error('ID de usuario inválido');
             }
-            const updatedUser = await userModel.findOneAndUpdate({ id: userId }, updateData, { new: true, runValidators: true });
+            const updatedUser = await userModel.findOneAndUpdate({ id: userId }, updateData, { returnDocument: 'after', runValidators: true });
             if (!updatedUser) throw new Error('Usuario no encontrado');
             return updatedUser;
         } catch (error) {

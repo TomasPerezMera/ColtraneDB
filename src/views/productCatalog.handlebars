@@ -1,32 +1,32 @@
 <section class="product-catalog">
+    <h1 class="product-catalog-title">El Rincón de Coltrane</h1>
+    <hr>
     <div class="product-catalog-container">
-        <h1>Catálogo de Vinilos</h1>
-        <hr>
         <div class="product-grid">
             {{#each products}}
-                <div class="product-card">
-                    <div class="product-image">
+                <article  class="product-card gradient-border">
+                    <div class="cover-wrapper hover-vinyl">
                         <img src="/static/covers/{{coverImageSource}}" alt="{{name}}">
                     </div>
-                    <h2>{{name}}</h2>
-                    <p>Artista: {{artist}}</p>
-                    <p>Precio: ${{currentPrice}}</p>
-                    <a href="/products/{{id}}">Ver detalle</a>
-                    <button data-id="{{id}}">Agregar al carrito</button>
-                </div>
+                    <div class="product-info">
+                        <h2 class="product-name">{{name}}</h2>
+                        <p>Artista: {{artist}}</p>
+                        <p>Precio: ${{currentPrice}}</p>
+                    </div>
+                    <button class="btn gradient-border btn-detail" data-product-id="{{id}}">Ver detalle</button>
+                </article>
             {{/each}}
         </div>
-
         <hr>
         <div class="pagination">
             {{#if pagination.hasPrevPage}}
-                <a href="/products?page={{pagination.prevPage}}">← Anterior</a>
+                <a class="nav-btn" href="/products?page={{pagination.prevPage}}">← Anterior</a>
             {{/if}}
                 &nbsp;
                 <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
                 &nbsp;
             {{#if pagination.hasNextPage}}
-                <a href="/products?page={{pagination.nextPage}}">Siguiente →</a>
+                <a class="nav-btn" href="/products?page={{pagination.nextPage}}">Siguiente →</a>
             {{/if}}
         </div>
     </div>

@@ -6,7 +6,7 @@ class ProductService {
         try {
             const {
                 page = 1,
-                limit = 4,
+                limit = 3,
                 sort,
                 category,
                 artist,
@@ -75,7 +75,7 @@ class ProductService {
             if (updateData.stock !== undefined && updateData.stock === 0) {
                 updateData.isAvailable = false;
             }
-            const updatedProduct = await productModel.findOneAndUpdate({ id: productId }, updateData, { new: true, runValidators: true });
+            const updatedProduct = await productModel.findOneAndUpdate({ id: productId }, updateData, { returnDocument: 'after', runValidators: true });
             if (!updatedProduct) {
                 throw new Error('Producto no encontrado');
             }
@@ -90,7 +90,7 @@ class ProductService {
             if (!Number.isInteger(Number(productId))) {
                 throw new Error('ID de producto inválido');
             }
-            const deletedProduct = await productModel.findOneAndUpdate({ id: productId }, { isAvailable: false }, { new: true });
+            const deletedProduct = await productModel.findOneAndUpdate({ id: productId }, { isAvailable: false }, { returnDocument: 'after' });
             if (!deletedProduct) {
                 throw new Error('Producto no encontrado');
             }

@@ -11,14 +11,18 @@
                     <p>Cantidad: {{this.quantity}}</p>
                     <p>Precio: ${{this.product.currentPrice}} x {{this.quantity}}</p>
 
-                    <button data-product-id="{{this.product._id}}">Eliminar</button>
+                    <button class="remove-from-cart btn" data-product-id="{{this.product._id}}">
+                        Eliminar
+                    </button>
                 </div>
             {{/each}}
         </div>
-
         <div class="cart-total">
             <h2>Total de ítems: {{cart.products.length}}</h2>
             <h2>Total a pagar: ${{cart.totalPrice}}</h2>
+            <button class="btn clear-cart">
+                Vaciar carrito
+            </button>
         </div>
     {{else}}
         <p>Tu carrito está vacío.</p>
