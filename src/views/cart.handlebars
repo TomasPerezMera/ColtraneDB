@@ -1,5 +1,5 @@
 <div class="cart-container">
-    <h1>Tu Carrito</h1>
+    <h1 class="product-title">Tu Carrito</h1>
     <hr>
     {{#if cart.products.length}}
         <div class="cart-items">
@@ -10,7 +10,6 @@
                     <p>Precio unitario: ${{this.product.currentPrice}}</p>
                     <p>Cantidad: {{this.quantity}}</p>
                     <p>Precio: ${{this.product.currentPrice}} x {{this.quantity}}</p>
-
                     <button class="remove-from-cart btn" data-product-id="{{this.product._id}}">
                         Eliminar
                     </button>

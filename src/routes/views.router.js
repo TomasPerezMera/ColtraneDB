@@ -42,7 +42,7 @@ router.get('/carts/:cid', async (req, res) => {
         const cart = await CartService.getById(req.params.cid);
         res.render('cart', {
             title: 'Tu Carrito',
-            cart
+            cart: cart.toObject()
         });
     } catch (error) {
         res.render('error', { message: error.message });

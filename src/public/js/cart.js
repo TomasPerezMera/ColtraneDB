@@ -1,4 +1,3 @@
-
 // Obtención del carrito.
 function getCartId() {
     return localStorage.getItem("cartId");
@@ -22,10 +21,9 @@ async function initCart() {
 
 // Añadir un producto al carrito.
 async function addToCart(productId, quantity = 1) {
-    const cartId = getCartId();
+    let cartId = getCartId();
     if (!cartId) {
-        console.error("Carrito no encontrado. Por favor, recarga la página.");
-        return;
+        cartId = await initCart();
     }
     const res = await fetch(`/api/carts/${cartId}/products/${productId}`, {
         method: "POST",
@@ -39,6 +37,7 @@ async function addToCart(productId, quantity = 1) {
         console.error(err.message);
         return;
     }
+    updateCartCounter();
     animateCartIcon();
 }
 
@@ -70,35 +69,13 @@ function animateCartIcon() {
     }, 300);
 }
 
-// Event Listeners.
-function initCartButtons() {
-    document.querySelectorAll(".remove-btn").forEach(btn => {
-        btn.addEventListener("click", e => {
-            const productId = e.target.dataset.productId;
-            removeFromCart(productId);
-        });
-    });
-    const clearBtn = document.getElementById("clear-cart-btn");
-    if (clearBtn) {
-        clearBtn.addEventListener("click", () => {
-            clearCart();
-        });
-    }
-}
-
+// Event Listeners de botones.
 function initAddToCartButtons() {
     document.body.addEventListener("click", async (e) => {
         const btn = e.target.closest(".add-to-cart");
         if (!btn) return;
         const productId = btn.dataset.productId;
-        const cartId = localStorage.getItem("cartId");
-        await fetch(`/api/carts/${cartId}/products/${productId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ quantity: 1 })
-        });
-        updateCartCounter();
-        animateCartIcon();
+        await addToCart(productId, 1);
     });
 }
 
@@ -107,19 +84,11 @@ function initCartPageButtons() {
         const removeBtn = e.target.closest(".remove-from-cart");
         if (removeBtn) {
             const productId = removeBtn.dataset.productId;
-            const cartId = localStorage.getItem("cartId");
-            await fetch(`/api/carts/${cartId}/products/${productId}`, {
-                method: "DELETE"
-            });
-            location.reload();
+            await removeFromCart(productId);
         }
         const clearBtn = e.target.closest(".clear-cart");
         if (clearBtn) {
-            const cartId = localStorage.getItem("cartId");
-            await fetch(`/api/carts/${cartId}`, {
-                method: "DELETE"
-            });
-            location.reload();
+            await clearCart();
         }
     });
 }
@@ -134,7 +103,7 @@ async function updateCartCounter() {
     if (counter) counter.textContent = count;
 }
 
-// Event Listener para carga de página.
+// Event Listeners en la carga de página.
 document.addEventListener("DOMContentLoaded", async () => {
     await initCart();
     initAddToCartButtons();
