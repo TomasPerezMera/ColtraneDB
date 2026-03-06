@@ -40,9 +40,11 @@ router.get('/products/:pid', async (req, res) => {
 router.get('/carts/:cid', async (req, res) => {
     try {
         const cart = await CartService.getById(req.params.cid);
+        const totalItems = cart.products.reduce((sum, item) => sum + item.quantity, 0);
         res.render('cart', {
             title: 'Tu Carrito',
-            cart: cart.toObject()
+            cart: cart.toObject(),
+            totalItems
         });
     } catch (error) {
         res.render('error', { message: error.message });
