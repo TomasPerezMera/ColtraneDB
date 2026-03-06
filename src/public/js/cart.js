@@ -155,9 +155,20 @@ function initQuantityControls() {
         const controls = btn.closest(".quantity-controls");
         const qtyDisplay = controls.querySelector(".qty-display");
         let currentQty = parseInt(qtyDisplay.textContent);
-        if (action === "increase" && currentQty < 3) currentQty++;
-        if (action === "decrease" && currentQty > 1) currentQty--;
-        await updateProductQuantity(productId, currentQty);
+        if (action === "increase" && currentQty < 3) {
+            currentQty++;
+            await updateProductQuantity(productId, currentQty);
+        }
+        if (action === "decrease") {
+            if (currentQty === 1) {
+                // Eliminar producto si llega a 0
+                await removeFromCart(productId);
+                return;
+            } else {
+                currentQty--;
+                await updateProductQuantity(productId, currentQty);
+            }
+        }
     });
 }
 
@@ -173,6 +184,21 @@ function initProductDetailQuantity() {
     });
 }
 
+function initPurchaseButton() {
+    document.body.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".make-purchase");
+        if (!btn) return;
+        await Swal.fire({
+            icon: 'success',
+            title: '¡Gracias por tu compra!',
+            text: 'Tu pedido ha sido procesado correctamente.',
+            confirmButtonText: 'Volver al catálogo',
+            confirmButtonColor: '#6366f1'
+        });
+        await clearCart();
+        window.location.href = '/products';
+    });
+}
 
 // Event Listeners en la carga de página.
 document.addEventListener("DOMContentLoaded", async () => {
@@ -181,5 +207,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     initCartPageButtons();
     initQuantityControls();
     initProductDetailQuantity();
+    initPurchaseButton();
     updateCartCounter();
 });

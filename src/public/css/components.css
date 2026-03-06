@@ -97,6 +97,10 @@ a {
     }
 }
 
+.product-detail-image{
+    position:static;
+}
+
 .product-info {
     background: rgba(25,10,60,0.7);
     padding: 2.5rem;
@@ -177,6 +181,28 @@ a {
         .btn {
             flex-shrink: 2;
 
+        }
+    }
+}
+
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    .welcome-image {
+        max-width: 40%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+    .welcome-text {
+        text-align: center;
+        font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+        p {
+            margin: 15px 0;
         }
     }
 }
