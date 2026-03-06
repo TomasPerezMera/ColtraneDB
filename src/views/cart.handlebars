@@ -2,25 +2,38 @@
     <h1 class="product-title">Tu Carrito</h1>
     <hr>
     {{#if cart.products.length}}
-        <div class="cart-items">
+        <div class="cart-items-container gradient-border">
             {{#each cart.products}}
-                <div class="cart-item">
-                    <h3>{{this.product.name}}</h3>
-                    <p>Artista: {{this.product.artist}}</p>
-                    <p>Precio unitario: ${{this.product.currentPrice}}</p>
-                    <p>Cantidad: {{this.quantity}}</p>
-                    <p>Precio: ${{this.product.currentPrice}} x {{this.quantity}}</p>
-                    <button class="remove-from-cart btn" data-product-id="{{this.product._id}}">
-                        Eliminar
-                    </button>
+                <div class="cart-item product-card">
+                    <div class="cover-wrapper hover-vinyl">
+                        <img src="/static/covers/{{this.product.coverImageSource}}" alt="{{this.product.name}}">
+                    </div>
+                    <div class="product-detail-titles">
+                        <h3>{{this.product.name}}</h3>
+                        <p>Artista: {{this.product.artist}}</p>
+                        <p>Precio unitario: ${{this.product.currentPrice}}</p>
+                        <p>Cantidad: {{this.quantity}}</p>
+                        <p>Precio: ${{this.product.currentPrice}} x {{this.quantity}}</p>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="qty-btn btn" data-product-id="{{product._id}}" data-action="decrease">-</button>
+                        <span class="qty-display">{{quantity}}</span>
+                        <button class="qty-btn btn" data-product-id="{{product._id}}" data-action="increase">+</button>
+                        <button class="remove-from-cart btn" data-product-id="{{this.product._id}}">
+                            Eliminar
+                        </button>
+                    </div>
                 </div>
             {{/each}}
         </div>
-        <div class="cart-total">
+        <div class="cart-total product-info">
             <h2>Total de ítems: {{cart.products.length}}</h2>
             <h2>Total a pagar: ${{cart.totalPrice}}</h2>
             <button class="btn clear-cart">
                 Vaciar carrito
+            </button>
+            <button class="btn make-purchase">
+                Realizar Compra
             </button>
         </div>
     {{else}}

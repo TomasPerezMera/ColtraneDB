@@ -32,6 +32,12 @@
     .product-card {
         flex: 1 1 calc(50% - 1rem);
     }
+        .detail-grid {
+        grid-template-columns:1fr;
+        grid-template-areas:
+        "cover-wrapper"
+        "product-info";
+    }
 }
 
 @media (min-width: 1024px) {
@@ -43,7 +49,9 @@
         flex: 1 1 calc(33.333% - 1rem);
     }
     .detail-grid {
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
+        grid-template-columns:1fr;
+        grid-template-areas:
+        "cover-wrapper"
+        "product-info";
     }
 }

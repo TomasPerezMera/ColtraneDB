@@ -27,16 +27,31 @@ async function addToCart(productId, quantity = 1) {
     }
     const res = await fetch(`/api/carts/${cartId}/products/${productId}`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity })
     });
     if (!res.ok) {
         const err = await res.json();
-        console.error(err.message);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err.message || 'No se pudo añadir al carrito',
+            toast: true,
+            position: 'top-end',
+            timer: 3000,
+            showConfirmButton: false
+        });
         return;
     }
+    Swal.fire({
+        icon: 'success',
+        title: '¡Añadido!',
+        text: `${quantity} producto(s) añadido(s) al carrito`,
+        toast: true,
+        position: 'top-end',
+        timer: 2000,
+        showConfirmButton: false
+    });
     updateCartCounter();
     animateCartIcon();
 }
@@ -69,13 +84,51 @@ function animateCartIcon() {
     }, 300);
 }
 
-// Event Listeners de botones.
+
+// Actualizar el contador del carrito en la interfaz.
+async function updateCartCounter() {
+    const cartId = localStorage.getItem("cartId");
+    if (!cartId) return;
+    const res = await fetch(`/api/carts/${cartId}`);
+    const data = await res.json();
+    const count = data.payload.products.reduce((sum, p) => sum + p.quantity, 0);
+    const counter = document.querySelector(".cart-count");
+    console.log("Counter element:", counter, "Count:", count);
+    if (counter) counter.textContent = count;
+}
+
+// Actualizar cantidad de un producto específico.
+async function updateProductQuantity(productId, newQuantity) {
+    const cartId = getCartId();
+    const res = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: newQuantity })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err.message,
+            toast: true,
+            position: 'top-end',
+            timer: 3000
+        });
+        return;
+    }
+    location.reload();
+}
+
+// Event Listeners y funciones para inicializar botones.
 function initAddToCartButtons() {
     document.body.addEventListener("click", async (e) => {
         const btn = e.target.closest(".add-to-cart");
         if (!btn) return;
         const productId = btn.dataset.productId;
-        await addToCart(productId, 1);
+        const qtyElement = document.querySelector('.qty-value');
+        const quantity = qtyElement ? parseInt(qtyElement.textContent) : 1;
+        await addToCart(productId, quantity);
     });
 }
 
@@ -93,20 +146,40 @@ function initCartPageButtons() {
     });
 }
 
-async function updateCartCounter() {
-    const cartId = localStorage.getItem("cartId");
-    if (!cartId) return;
-    const res = await fetch(`/api/carts/${cartId}`);
-    const data = await res.json();
-    const count = data.payload.products.length;
-    const counter = document.getElementById("cart-count");
-    if (counter) counter.textContent = count;
+function initQuantityControls() {
+    document.body.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".qty-btn");
+        if (!btn) return;
+        const productId = btn.dataset.productId;
+        const action = btn.dataset.action;
+        const controls = btn.closest(".quantity-controls");
+        const qtyDisplay = controls.querySelector(".qty-display");
+        let currentQty = parseInt(qtyDisplay.textContent);
+        if (action === "increase" && currentQty < 3) currentQty++;
+        if (action === "decrease" && currentQty > 1) currentQty--;
+        await updateProductQuantity(productId, currentQty);
+    });
 }
+
+function initProductDetailQuantity() {
+    document.body.addEventListener("click", (e) => {
+        const btn = e.target.closest(".qty-btn-detail");
+        if (!btn) return;
+        const qtyValue = document.querySelector(".qty-value");
+        let qty = parseInt(qtyValue.textContent);
+        if (btn.dataset.action === "increase" && qty < 3) qty++;
+        if (btn.dataset.action === "decrease" && qty > 1) qty--;
+        qtyValue.textContent = qty;
+    });
+}
+
 
 // Event Listeners en la carga de página.
 document.addEventListener("DOMContentLoaded", async () => {
     await initCart();
     initAddToCartButtons();
     initCartPageButtons();
+    initQuantityControls();
+    initProductDetailQuantity();
     updateCartCounter();
 });

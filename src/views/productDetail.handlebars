@@ -3,7 +3,7 @@
         <div class="cover-wrapper hover-vinyl">
             <img src="/static/covers/{{product.coverImageSource}}" alt="{{product.name}}">
         </div>
-        <div class="product-detail">
+        <article class="product-detail">
             <h1 class="product-title">{{product.name}}</h1>
             <div class="product-info">
                 <div class="product-detail-titles">
@@ -19,19 +19,17 @@
                 </div>
                 <hr>
             </div>
-            <div class="product-detail-buttons">
+            <div class="detail-actions">
                 <div class="quantity-selector">
-                    <button class="btn qty-btn minus">-</button>
+                    <button class="btn qty-btn-detail" data-action="decrease">-</button>
                     <span class="qty-value">1</span>
-                    <button class="btn qty-btn plus">+</button>
+                    <button class="btn qty-btn-detail" data-action="increase">+</button>
                 </div>
-                <div class="detail-actions">
-                    <a class="btn nav-btn" href="/products">Volver al catálogo</a>
-                    <button class="add-to-cart btn" data-product-id="{{product._id}}" id="add-to-cart">
-                        Agregar al carrito
-                    </button>
-                </div>
+                <a class="btn nav-btn" href="/products">Volver al catálogo</a>
+                <button class="add-to-cart btn" data-product-id="{{product._id}}">
+                    Agregar al carrito
+                </button>
             </div>
-        </div>
+        </article>
     </div>
 </section>
