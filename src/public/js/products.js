@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await fetch(`/api/carts/${cartId}/products/${productId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ quantity })  // ← Usa la quantity seleccionada
+                body: JSON.stringify({ quantity })
             });
             Swal.fire({
                 toast: true,
@@ -92,7 +92,5 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
-
 });
 
