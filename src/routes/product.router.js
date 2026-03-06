@@ -71,6 +71,26 @@ router.use((req, res, next) => {
         }
     });
 
+// PUT - Descontar stock al confirmar compra.
+router.put('/:id/purchase', async (req, res) => {
+    try {
+        const { quantity } = req.body;
+        const product = await ProductService.getById(req.params.id);
+        if (product.stock < quantity) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Stock insuficiente'
+            });
+        }
+        const updated = await ProductService.update(req.params.id, {
+            stock: product.stock - quantity
+        });
+        res.status(200).json({ status: 'success', payload: updated });
+    } catch (error) {
+        res.status(400).json({ status: 'error', message: error.message });
+    }
+});
+
 // DELETE
     router.delete('/:id', async (req, res) => {
         try {

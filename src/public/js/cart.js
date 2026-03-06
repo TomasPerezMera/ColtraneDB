@@ -93,7 +93,6 @@ async function updateCartCounter() {
     const data = await res.json();
     const count = data.payload.products.reduce((sum, p) => sum + p.quantity, 0);
     const counter = document.querySelector(".cart-count");
-    console.log("Counter element:", counter, "Count:", count);
     if (counter) counter.textContent = count;
 }
 
@@ -188,15 +187,42 @@ function initPurchaseButton() {
     document.body.addEventListener("click", async (e) => {
         const btn = e.target.closest(".make-purchase");
         if (!btn) return;
-        await Swal.fire({
-            icon: 'success',
-            title: '¡Gracias por tu compra!',
-            text: 'Tu pedido ha sido procesado correctamente.',
-            confirmButtonText: 'Volver al catálogo',
-            confirmButtonColor: '#6366f1'
-        });
-        await clearCart();
-        window.location.href = '/products';
+        // Método para descontar stock de productos al "realizar compra".
+        try {
+            // 1. Obtenemos carrito con productos.
+            const cartId = getCartId();
+            const res = await fetch(`/api/carts/${cartId}`);
+            const data = await res.json();
+            const cart = data.payload;
+            // 2. Actualizamos el stock de cada producto.
+            for (const item of cart.products) {
+                const productId = item.product.id;
+                const quantity = item.quantity;
+                await fetch(`/api/products/${productId}/purchase`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ quantity })
+                });
+            }
+            // 3. Mostramos confirmación al usuario.
+            await Swal.fire({
+                icon: 'success',
+                title: '¡Gracias por tu compra!',
+                text: 'Tu pedido ha sido procesado correctamente',
+                confirmButtonText: 'Volver al catálogo',
+                confirmButtonColor: '#6366f1'
+            });
+            // 4. Vaciamos carrito y redirigimos a Productos.
+            await clearCart();
+            window.location.href = '/products';
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo procesar la compra',
+                confirmButtonColor: '#6366f1'
+            });
+        }
     });
 }
 

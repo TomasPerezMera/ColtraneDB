@@ -6,7 +6,9 @@
             {{#each cart.products}}
                 <div class="cart-item product-card">
                     <div class="cover-wrapper hover-vinyl">
-                        <img src="/static/covers/{{this.product.coverImageSource}}" alt="{{this.product.name}}">
+                        <a href="/products/{{this.product.id}}">
+                            <img src="/static/covers/{{this.product.coverImageSource}}" alt="{{this.product.name}}">
+                        </a>
                     </div>
                     <div class="product-detail-titles">
                         <h3>{{this.product.name}}</h3>
@@ -37,8 +39,8 @@
             </button>
         </div>
     {{else}}
-        <p>Tu carrito está vacío.</p>
+        <p class="product-info">Tu carrito está vacío.</p>
     {{/if}}
     <hr>
-    <a href="/products">Volver al catálogo</a>
+    <a href="/products" class="nav-btn btn">Volver al catálogo</a>
 </div>

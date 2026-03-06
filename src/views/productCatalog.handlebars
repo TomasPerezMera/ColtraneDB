@@ -6,7 +6,9 @@
             {{#each products}}
                 <article  class="product-card gradient-border">
                     <div class="cover-wrapper hover-vinyl">
-                        <img src="/static/covers/{{coverImageSource}}" alt="{{name}}">
+                        <a href="/products/{{id}}">
+                            <img src="/static/covers/{{coverImageSource}}" alt="{{name}}">
+                        </a>
                     </div>
                     <div class="product-detail-titles">
                         <h2 class="product-name">{{name}}</h2>
@@ -20,13 +22,13 @@
         <hr>
         <div class="pagination">
             {{#if pagination.hasPrevPage}}
-                <a class="nav-btn" href="/products?page={{pagination.prevPage}}">← Anterior</a>
+                <a class="nav-btn btn" href="/products?page={{pagination.prevPage}}">← Anterior</a>
             {{/if}}
                 &nbsp;
                 <span>Página {{pagination.page}} de {{pagination.totalPages}}</span>
                 &nbsp;
             {{#if pagination.hasNextPage}}
-                <a class="nav-btn" href="/products?page={{pagination.nextPage}}">Siguiente →</a>
+                <a class="nav-btn btn" href="/products?page={{pagination.nextPage}}">Siguiente →</a>
             {{/if}}
         </div>
     </div>
